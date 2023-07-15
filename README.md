@@ -17,7 +17,7 @@ The CovidDEProject aims to analyze COVID-19 data for various US states and count
 
 ## Dataset Link:
 
-The datasets used in this project can be accessed through the following link: ![Dataset Link](https://aws.amazon.com/covid-19-data-lake/)
+The datasets used in this project can be accessed through the following link: [Dataset Link]([https://aws.amazon.com/covid-19-data-lake/](https://dj2taa9i652rf.cloudfront.net/))
 
 ## Project Flow:
 
