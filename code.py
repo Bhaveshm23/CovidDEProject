@@ -12,8 +12,8 @@ AWS_ACCESS_KEY = '<your-access-key>'
 AWS_SECRET_KEY = '<your-secret-key>'
 AWS_REGION = 'us-east-1'
 SCHEMA_NAME = 'covid19db'
-S3_STAGING_DIR = '<s3-bucket-name>/output/'
-S3_BUCKET_NAME = '<s3-bucket-name>'
+S3_STAGING_DIR = '<s3-athena-bucket-name>/output/'
+S3_BUCKET_NAME = '<s3-athena-bucket-name>'
 S3_OUTPUT_DIRECTORY = 'output'
 
 
