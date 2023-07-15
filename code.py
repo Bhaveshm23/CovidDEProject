@@ -224,7 +224,7 @@ dimDate.head()
 from botocore import regions
  # Storing the output in S3
 
-output_bucket = '<output-bucket-name>
+output_bucket = '<output-bucket-name>' # bucket to store the output of dimesion and fact tables in csv
 csv_buffer = StringIO() # since we want to put value in binary format
 
 factCovid.to_csv(csv_buffer)
