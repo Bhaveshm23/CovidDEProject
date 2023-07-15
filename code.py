@@ -56,7 +56,7 @@ def download_and_load_query_results(
   )
   return pd.read_csv(temp_file_location)
 
-# Running query on all the tables in Athena
+# Running query on all the tables in Athena and storing data in S3. Stores CSV data and meta data.
 response = athena_client.start_query_execution(
     QueryString = "SELECT * FROM enigma_jhu",
     QueryExecutionContext = {"Database": SCHEMA_NAME},
