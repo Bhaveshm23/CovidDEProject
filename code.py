@@ -280,83 +280,102 @@ conn = redshift_connector.connect(
 conn.autocommit = True
 cursor = redshift_connector.Cursor = conn.cursor()
 
-# creating table on redshift
+creating table on redshift
 cursor.execute("""
 CREATE TABLE "dimDate" (
 "index" INTEGER,
-"fips" INTEGER,
-"date" TIMESTAMP,
-"year" INTEGER,
-"month" INTEGER,
-"day_of_week" INTEGER
+  "fips" INTEGER,
+  "date" TIMESTAMP,
+  "year" INTEGER,
+  "month" INTEGER,
+  "day_of_week" INTEGER
 )
 """)
 
 cursor.execute("""
 CREATE TABLE "factCovid" (
 "index" INTEGER,
-  "fips" INTEGER,
-  "date" TIMESTAMP,
-  "year" INTEGER,
-  "month" INTEGER,
-  "day_of_week" INTEGER
+  "fips" REAL,
+  "province_state" TEXT,
+  "country_region" TEXT,
+  "confirmed" REAL,
+  "deaths" REAL,
+  "recovered" REAL,
+  "active" REAL,
+  "date" INTEGER,
+  "positive" REAL,
+  "negative" REAL,
+  "hospitalizedcurrently" REAL,
+  "hospitalized" REAL,
+  "hospitalizeddischarged" REAL
 )
-               """)
+              """)
 
 
 cursor.execute("""
 CREATE TABLE "dimRegion" (
 "index" INTEGER,
-  "fips" INTEGER,
-  "date" TIMESTAMP,
-  "year" INTEGER,
-  "month" INTEGER,
-  "day_of_week" INTEGER
-)
-               """)
+  "fips" REAL,
+  "province_state" TEXT,
+  "country_region" TEXT,
+  "latitude" REAL,
+  "longitude" REAL,
+  "county" TEXT,
+  "state" TEXT
+)             """)
 
 cursor.execute("""
 CREATE TABLE "dimHospital" (
 "index" INTEGER,
-  "fips" INTEGER,
-  "date" TIMESTAMP,
-  "year" INTEGER,
-  "month" INTEGER,
-  "day_of_week" INTEGER
+  "fips" REAL,
+  "state_name" TEXT,
+  "latitude" REAL,
+  "longtitude" REAL,
+  "hq_address" TEXT,
+  "hospital_name" TEXT,
+  "hq_state" TEXT,
+  "hospital_type" TEXT,
+  "hq_city" TEXT
 )
-               """)
+              """)
 
-# copy data from s3 to redshift
+
+#EMPTYASNULL for taking a NULL value for inputs while loading for eg: '',123,China.. 
+copy data from s3 to redshift
 cursor.execute("""
-copy dimDate from '<s3-output-bucket>/output/dimDate.csv'
-iam_role 'aws_iam_role='arn:aws:iam::474557776735:role/redshift-s3-access'
+copy dimDate from 's3://<s3-bucket>/output/dimDate.csv'
+IAM_ROLE 'arn:aws:iam::474557776735:role/redshift-s3-access'
 delimiter ','
 region 'us-east-1'
 IGNOREHEADER 1 """)
 
 
 cursor.execute("""
-copy dimHospital from '<s3-output-bucket>/output/dimHospital.csv'
-iam_role 'aws_iam_role='arn:aws:iam::474557776735:role/redshift-s3-access'
+copy dimHospital from 's3://<s3-bucket>/output/dimHospital.csv'
+IAM_ROLE 'arn:aws:iam::474557776735:role/redshift-s3-access'
 delimiter ','
 region 'us-east-1'
 IGNOREHEADER 1
+EMPTYASNULL
+""")
+
+
+
+cursor.execute("""
+copy factCovid from 's3://<s3-bucket>/output/factCovid.csv'
+IAM_ROLE 'arn:aws:iam::474557776735:role/redshift-s3-access'
+delimiter ','
+region 'us-east-1'
+IGNOREHEADER 1
+EMPTYASNULL
 """)
 
 
 cursor.execute("""
-copy factCovid from '<s3-output-bucket>/output/factCovid.csv'
-iam_role 'aws_iam_role='arn:aws:iam::474557776735:role/redshift-s3-access'
+copy dimRegion from 's3://<s3-bucket>/output/dimRegion.csv'
+IAM_ROLE 'arn:aws:iam::474557776735:role/redshift-s3-access'
 delimiter ','
 region 'us-east-1'
 IGNOREHEADER 1
-""")
-
-
-cursor.execute("""
-copy dimRegion from '<s3-output-bucket>/output/dimRegion.csv'
-iam_role 'aws_iam_role='arn:aws:iam::474557776735:role/redshift-s3-access'
-delimiter ','
-region 'us-east-1'
-IGNOREHEADER 1
+EMPTYASNULL
 """)
